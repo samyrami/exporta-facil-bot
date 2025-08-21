@@ -4,7 +4,7 @@ import { ChatInput } from './ChatInput';
 import { UniversityBranding } from './UniversityBranding';
 import { useChatBot } from '@/hooks/useChatBot';
 import { Button } from '@/components/ui/button';
-import { HelpCircle, RotateCcw } from 'lucide-react';
+import { HelpCircle, RotateCcw, Sparkles } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const ExportBot = () => {
@@ -23,8 +23,15 @@ export const ExportBot = () => {
   }, [initializeBot]);
 
   useEffect(() => {
+    // Smooth auto-scroll to bottom when new messages arrive
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+      const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollElement) {
+        scrollElement.scrollTo({
+          top: scrollElement.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
     }
   }, [messages]);
 
@@ -88,8 +95,11 @@ export const ExportBot = () => {
                 ))}
                 
                 {state.currentStep !== 'diagnosis' && messages.length > 0 && (
-                  <div className="flex justify-start">
-                    <div className="bg-chat-bubble-bot border border-card-border rounded-2xl px-4 py-3 shadow-soft">
+                  <div className="flex justify-start items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-soft">
+                      <Sparkles className="w-4 h-4 text-primary-foreground" />
+                    </div>
+                    <div className="bg-chat-bubble-bot border border-card-border rounded-2xl px-4 py-3 shadow-soft animate-pulse">
                       <div className="typing-dots">
                         <span></span>
                         <span></span>

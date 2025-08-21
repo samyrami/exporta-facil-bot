@@ -1,10 +1,15 @@
-import { GraduationCap, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
+import unisabanaLogo from '@/assets/unisabana-logo.png';
 
 export const UniversityBranding = () => {
   return (
-    <div className="text-center mb-6 p-6 bg-card border border-card-border rounded-2xl shadow-soft">
-      <div className="flex items-center justify-center gap-3 mb-3">
-        <GraduationCap className="w-8 h-8 text-primary" />
+    <div className="text-center mb-6 p-6 bg-card border border-card-border rounded-2xl shadow-soft animate-fade-in">
+      <div className="flex items-center justify-center gap-4 mb-4">
+        <img 
+          src={unisabanaLogo} 
+          alt="Universidad de La Sabana" 
+          className="w-12 h-12 object-contain"
+        />
         <Globe className="w-6 h-6 text-secondary" />
       </div>
       <h1 className="text-2xl font-bold text-primary mb-2">

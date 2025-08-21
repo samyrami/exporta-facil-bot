@@ -25,9 +25,14 @@ export const useChatBot = () => {
   const initializeBot = useCallback(() => {
     const welcomeMessage = `¡Hola! Soy el asistente del **Termómetro Exportador**, desarrollado por el **Laboratorio de Comercio Internacional de la Universidad de La Sabana**.
 
-Este cuestionario te ayudará a evaluar la preparación y capacidad exportadora de tu empresa. La información que proporciones será utilizada únicamente para diagnóstico y orientación general.
+Este cuestionario te ayudará a **evaluar la preparación y capacidad exportadora** de tu empresa. La información que proporciones será utilizada únicamente para diagnóstico y orientación general.
 
-Para comenzar, necesito recopilar algunos datos básicos de contacto. ¿Estás listo para empezar?`;
+> 📋 El proceso incluye:
+> - Recolección de datos básicos
+> - Cuestionario de 5 preguntas clave  
+> - Diagnóstico personalizado con recomendaciones
+
+¿Estás listo para empezar?`;
 
     addMessage(welcomeMessage, 'bot', ['Sí, comenzar cuestionario', 'Necesito más información']);
   }, [addMessage]);
@@ -40,7 +45,7 @@ Para comenzar, necesito recopilar algunos datos básicos de contacto. ¿Estás l
     }));
     
     addMessage(
-      'Perfecto, comencemos recopilando tus datos de contacto.\n\n¿Cuál es tu **nombre completo**?',
+      '**📝 Datos de Contacto**\n\nPerfecto, comencemos recopilando tus datos de contacto.\n\n¿Cuál es tu **nombre completo**?',
       'bot'
     );
   }, [addMessage]);
@@ -63,7 +68,7 @@ Para comenzar, necesito recopilar algunos datos básicos de contacto. ¿Estás l
       const nextField = contactFields[fieldIndex + 1];
       setState(prev => ({ ...prev, currentField: nextField.key }));
       
-      addMessage(`Gracias. Ahora, ¿cuál es ${nextField.label.toLowerCase()}?`, 'bot');
+      addMessage(`Gracias **${input}**. Ahora, ¿cuál es ${nextField.label.toLowerCase()}?`, 'bot');
     } else {
       // Contact collection complete
       setState(prev => ({ 
@@ -73,14 +78,14 @@ Para comenzar, necesito recopilar algunos datos básicos de contacto. ¿Estás l
       }));
       
       addMessage(
-        'Excelente, ya tengo todos tus datos de contacto. Ahora comenzaremos con el cuestionario de evaluación exportadora.\n\nResponde cada pregunta seleccionando la opción que mejor describa la situación actual de tu empresa.',
+        '✅ **¡Excelente!** Ya tengo todos tus datos de contacto.\n\nAhora comenzaremos con el **cuestionario de evaluación exportadora**.\n\n> 💡 **Instrucciones:** Responde cada pregunta seleccionando la opción que mejor describa la situación actual de tu empresa.',
         'bot'
       );
       
       setTimeout(() => {
         const firstQuestion = questions[0];
         addMessage(
-          `**Pregunta 1:** ${firstQuestion.text}`,
+          `**Pregunta ${firstQuestion.id}/5** - *${firstQuestion.category}*\n\n${firstQuestion.text}`,
           'bot',
           firstQuestion.options
         );
@@ -112,7 +117,7 @@ Para comenzar, necesito recopilar algunos datos básicos de contacto. ¿Estás l
       setTimeout(() => {
         const nextQuestion = questions[state.currentQuestionIndex + 1];
         addMessage(
-          `**Pregunta ${state.currentQuestionIndex + 2}:** ${nextQuestion.text}`,
+          `**Pregunta ${nextQuestion.id}/5** - *${nextQuestion.category}*\n\n${nextQuestion.text}`,
           'bot',
           nextQuestion.options
         );
@@ -126,43 +131,96 @@ Para comenzar, necesito recopilar algunos datos básicos de contacto. ¿Estás l
 
   const generateDiagnosis = useCallback(() => {
     addMessage(
-      'Perfecto, has completado todo el cuestionario. Ahora voy a generar tu diagnóstico personalizado...',
+      '🎯 **¡Perfecto!** Has completado todo el cuestionario.\n\n⏳ Ahora voy a generar tu **diagnóstico personalizado**...',
       'bot'
     );
 
     setTimeout(() => {
-      const diagnosis = `## 📊 **DIAGNÓSTICO DE CAPACIDAD EXPORTADORA**
+      const diagnosis = `# 📊 DIAGNÓSTICO DE CAPACIDAD EXPORTADORA
 
-### 👤 **Datos de la Evaluación**
+## 👤 **Datos de la Evaluación**
 - **Empresa:** ${state.contactInfo.company}
-- **Responsable:** ${state.contactInfo.name}
+- **Responsable:** ${state.contactInfo.name}  
 - **Ciudad:** ${state.contactInfo.city}
+- **Fecha:** ${new Date().toLocaleDateString('es-CO')}
 
-### ✅ **FORTALEZAS IDENTIFICADAS**
+---
 
-**Preparación Institucional:** Tu empresa muestra interés genuino en la internacionalización, lo cual es el primer paso fundamental para el éxito exportador.
+## ✅ **FORTALEZAS IDENTIFICADAS**
 
-### ⚠️ **ÁREAS DE MEJORA**
+### 🏢 Preparación Institucional
+Tu empresa muestra **interés genuino** en la internacionalización, lo cual es el primer paso fundamental para el éxito exportador.
 
-**Certificaciones de Calidad:** Es recomendable implementar sistemas de gestión de calidad reconocidos internacionalmente.
+### 📋 Compromiso con la Evaluación  
+Has completado exitosamente el proceso de evaluación, demostrando **seriedad** en el proceso de diagnóstico.
 
-**Capacidad Productiva:** Evalúa la posibilidad de aumentar tu capacidad de producción para atender demanda internacional.
+---
 
-### 🎯 **RECOMENDACIONES ESTRATÉGICAS**
+## ⚠️ **ÁREAS DE MEJORA IDENTIFICADAS**
 
-1. **Certificaciones:** Considera obtener certificaciones ISO 9001 o específicas de tu sector.
+### 🏆 Certificaciones de Calidad
+Es **altamente recomendable** implementar sistemas de gestión de calidad reconocidos internacionalmente como:
+- ISO 9001 (Gestión de Calidad)
+- Certificaciones específicas del sector
+- Buenas Prácticas de Manufactura (BPM)
 
-2. **Investigación de Mercados:** Realiza estudios de mercado para identificar oportunidades específicas.
+### 🏭 Capacidad Productiva
+Evalúa la posibilidad de **aumentar tu capacidad de producción** para atender demanda internacional que suele requerir volúmenes superiores.
 
-3. **Capacitación:** Invierte en formación de tu equipo en comercio internacional.
+### 🌍 Conocimiento de Mercados
+Desarrollar **inteligencia de mercados** para identificar oportunidades específicas por país y sector.
 
-4. **Alianzas:** Explora partnerships con empresas exportadoras experimentadas.
+---
 
-### 📞 **Próximos Pasos**
+## 🎯 **RECOMENDACIONES ESTRATÉGICAS**
 
-El **Laboratorio de Comercio Internacional de la Universidad de La Sabana** ofrece programas especializados para fortalecer tu capacidad exportadora.
+### 1. 📜 **Certificaciones y Calidad**
+- Implementar ISO 9001 como base
+- Considerar certificaciones específicas de tu sector  
+- Establecer procesos de mejora continua
 
-¡Gracias por participar en esta evaluación! Este diagnóstico puede servir como base para tomar decisiones estratégicas sobre la internacionalización de tu empresa.`;
+### 2. 🔍 **Investigación de Mercados**
+- Realizar estudios de mercado por país objetivo
+- Identificar canales de distribución apropiados
+- Analizar competencia internacional
+
+### 3. 👥 **Capacitación del Equipo**  
+- Formación en comercio internacional
+- Desarrollo de competencias en idiomas
+- Conocimiento de logística internacional
+
+### 4. 🤝 **Alianzas Estratégicas**
+- Partnerships con empresas exportadoras experimentadas
+- Asociaciones gremiales de exportadores
+- Participación en misiones comerciales
+
+### 5. 📈 **Planificación Financiera**
+- Evaluación de costos de internacionalización
+- Acceso a instrumentos financieros para exportación
+- Gestión de riesgos cambiarios
+
+---
+
+## 📞 **PRÓXIMOS PASOS**
+
+El **Laboratorio de Comercio Internacional de la Universidad de La Sabana** ofrece:
+
+- 🎓 **Programas especializados** en comercio internacional
+- 🔬 **Servicios de consultoría** para exportadores  
+- 📚 **Capacitaciones** en preparación exportadora
+- 🌐 **Inteligencia de mercados** y oportunidades comerciales
+
+> **Contacto:** Laboratorio de Comercio Internacional  
+> Universidad de La Sabana  
+> 📧 Email: [comercio.internacional@unisabana.edu.co](mailto:comercio.internacional@unisabana.edu.co)
+
+---
+
+## 🙏 **AGRADECIMIENTOS**
+
+¡**Gracias** por participar en esta evaluación! Este diagnóstico puede servir como base para tomar decisiones estratégicas sobre la **internacionalización de tu empresa**.
+
+*Desarrollado por el Laboratorio de Comercio Internacional - Universidad de La Sabana © 2024*`;
 
       addMessage(diagnosis, 'bot');
     }, 2000);
@@ -176,7 +234,7 @@ El **Laboratorio de Comercio Internacional de la Universidad de La Sabana** ofre
           startContactCollection();
         } else {
           addMessage(
-            'El Termómetro Exportador es una herramienta de diagnóstico que evalúa diferentes aspectos de tu empresa como certificaciones, experiencia internacional, capacidad productiva, recursos humanos y adaptación de productos.\n\nCuando estés listo, selecciona "Sí, comenzar cuestionario".',
+            '📖 **Más Información sobre el Termómetro Exportador**\n\nEl Termómetro Exportador es una **herramienta de diagnóstico especializada** que evalúa diferentes aspectos críticos de tu empresa:\n\n### 🔍 **Aspectos Evaluados:**\n- 🏆 **Certificaciones de calidad** (ISO, BPM, BPA)\n- 🌍 **Experiencia internacional** \n- 🏭 **Capacidad productiva**\n- 👥 **Recursos humanos especializados**\n- 📦 **Adaptación de productos**\n\n### 📊 **Beneficios del Diagnóstico:**\n- Identificación de **fortalezas** y **oportunidades de mejora**\n- **Recomendaciones estratégicas** personalizadas\n- **Hoja de ruta** para la internacionalización\n\nCuando estés listo, selecciona "Sí, comenzar cuestionario".',
             'bot',
             ['Sí, comenzar cuestionario']
           );
@@ -198,7 +256,7 @@ El **Laboratorio de Comercio Internacional de la Universidad de La Sabana** ofre
       const currentQuestion = questions[state.currentQuestionIndex];
       if (currentQuestion.explanation) {
         addMessage(
-          `💡 **Explicación:** ${currentQuestion.explanation}`,
+          `💡 **Explicación**\n\n${currentQuestion.explanation}\n\n---\n\n**Pregunta ${currentQuestion.id}/5** - *${currentQuestion.category}*\n\n${currentQuestion.text}`,
           'bot',
           currentQuestion.options
         );
