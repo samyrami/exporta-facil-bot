@@ -1,9 +1,9 @@
 # Force Nixpacks usage for Railway deployment
 
+providers = ["node"]
+
 [variables]
 NODE_ENV = "production"
-
-providers = ["node"]
 
 [phases.install]
 cmd = "npm ci --prefer-offline --no-audit"
