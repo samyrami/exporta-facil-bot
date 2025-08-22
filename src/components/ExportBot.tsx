@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { UniversityBranding } from './UniversityBranding';
+import { DiagnosisResult } from './DiagnosisResult';
+import { OpenAIChat } from './OpenAIChat';
 import { useChatBot } from '@/hooks/useChatBot';
 import { Button } from '@/components/ui/button';
 import { HelpCircle, RotateCcw, Sparkles } from 'lucide-react';
@@ -11,9 +13,13 @@ export const ExportBot = () => {
   const { 
     messages, 
     state, 
+    diagnosis,
     handleUserMessage, 
     initializeBot, 
-    requestExplanation 
+    requestExplanation,
+    continueToChat,
+    restartEvaluation,
+    backToDiagnosis
   } = useChatBot();
   
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -39,50 +45,43 @@ export const ExportBot = () => {
   const isWaitingForInput = state.currentStep === 'contact' || 
     (state.currentStep === 'questionnaire' && !messages[messages.length - 1]?.options);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-chat-background to-background">
-      <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <UniversityBranding />
-        
-        <div className="bg-card border border-card-border rounded-2xl shadow-strong overflow-hidden">
-          <div className="bg-gradient-to-r from-primary to-primary-light p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-primary-foreground font-semibold text-lg">
-                  Asistente Exportador
-                </h2>
-                <p className="text-primary-foreground/80 text-sm">
-                  {state.currentStep === 'welcome' && 'Iniciando evaluación...'}
-                  {state.currentStep === 'contact' && 'Recopilando datos de contacto'}
-                  {state.currentStep === 'questionnaire' && `Pregunta ${state.currentQuestionIndex + 1} de ${5}`}
-                  {state.currentStep === 'diagnosis' && 'Generando diagnóstico...'}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                {canRequestExplanation && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={requestExplanation}
-                    className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20"
-                  >
-                    <HelpCircle className="w-4 h-4 mr-2" />
-                    Explicación
-                  </Button>
-                )}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.location.reload()}
-                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                </Button>
-              </div>
+  // Render different content based on current step
+  const renderContent = () => {
+    switch (state.currentStep) {
+      case 'diagnosis':
+        return diagnosis ? (
+          <DiagnosisResult
+            diagnosis={diagnosis}
+            onContinueChat={continueToChat}
+            onRestart={restartEvaluation}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Generando diagnóstico...</p>
             </div>
           </div>
+        );
 
-          <div className="h-[600px] flex flex-col">
+      case 'chat':
+        return (
+          <OpenAIChat
+            onBackToDiagnosis={backToDiagnosis}
+            companyName={diagnosis?.company || 'Tu empresa'}
+            diagnosisData={diagnosis ? {
+              score: diagnosis.score,
+              category: diagnosis.category,
+              strengths: diagnosis.strengths,
+              weaknesses: diagnosis.weaknesses,
+              recommendations: diagnosis.recommendations
+            } : undefined}
+          />
+        );
+
+      default:
+        return (
+          <>
             <ScrollArea ref={scrollAreaRef} className="flex-1 p-6">
               <div className="space-y-4">
                 {messages.map((message) => (
@@ -123,6 +122,72 @@ export const ExportBot = () => {
                 />
               </div>
             )}
+          </>
+        );
+    }
+  };
+
+  const getStepDescription = () => {
+    switch (state.currentStep) {
+      case 'welcome':
+        return 'Iniciando evaluación...';
+      case 'contact':
+        return 'Recopilando datos de contacto';
+      case 'questionnaire':
+        return `Pregunta ${state.currentQuestionIndex + 1} de 17`;
+      case 'diagnosis':
+        return 'Generando diagnóstico...';
+      case 'chat':
+        return 'Chat especializado activo';
+      default:
+        return 'Iniciando evaluación...';
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-chat-background to-background">
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <UniversityBranding />
+        
+        <div className="bg-card border border-card-border rounded-2xl shadow-strong overflow-hidden">
+          <div className="bg-gradient-to-r from-primary to-primary-light p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-primary-foreground font-semibold text-lg">
+                  Asistente Exportador
+                </h2>
+                <p className="text-primary-foreground/80 text-sm">
+                  {getStepDescription()}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                {canRequestExplanation && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={requestExplanation}
+                    className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20"
+                  >
+                    <HelpCircle className="w-4 h-4 mr-2" />
+                    Explicación
+                  </Button>
+                )}
+                {state.currentStep !== 'diagnosis' && state.currentStep !== 'chat' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={restartEvaluation}
+                    className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="h-[600px] flex flex-col">
+            {renderContent()}
           </div>
         </div>
 

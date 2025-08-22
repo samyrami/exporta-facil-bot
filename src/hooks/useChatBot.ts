@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Message, QuestionnaireState, ContactInfo } from '@/types/chat';
+import { Message, QuestionnaireState, ContactInfo, DiagnosisResult } from '@/types/chat';
 import { questions, contactFields } from '@/data/questionnaire';
 
 export const useChatBot = () => {
@@ -8,12 +8,14 @@ export const useChatBot = () => {
     currentStep: 'welcome',
     currentQuestionIndex: 0,
     contactInfo: {},
-    answers: {}
+    answers: {},
+    diagnosisGenerated: false
   });
+  const [diagnosis, setDiagnosis] = useState<DiagnosisResult | null>(null);
 
   const addMessage = useCallback((content: string, type: 'user' | 'bot', options?: string[]) => {
     const newMessage: Message = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substring(2)}`,
       type,
       content,
       timestamp: new Date(),
@@ -29,8 +31,9 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
 
 > 📋 El proceso incluye:
 > - Recolección de datos básicos
-> - Cuestionario de 5 preguntas clave  
+> - Cuestionario de 23 preguntas clave  
 > - Diagnóstico personalizado con recomendaciones
+> - Chat especializado para resolver dudas
 
 ¿Estás listo para empezar?`;
 
@@ -41,11 +44,11 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
     setState(prev => ({ 
       ...prev, 
       currentStep: 'contact', 
-      currentField: 'name' 
+      currentField: 'company' 
     }));
     
     addMessage(
-      '**📝 Datos de Contacto**\n\nPerfecto, comencemos recopilando tus datos de contacto.\n\n¿Cuál es tu **nombre completo**?',
+      '**📝 Datos de Contacto**\n\nPerfecto, comencemos recopilando tus datos de contacto.\n\n¿Cuál es el **nombre de tu compañía**?',
       'bot'
     );
   }, [addMessage]);
@@ -54,13 +57,19 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
     const currentField = state.currentField!;
     const fieldIndex = contactFields.findIndex(f => f.key === currentField);
     
-    setState(prev => ({
+    console.log('📝 Guardando dato de contacto:', { currentField, input, fieldIndex });
+    
+    setState(prev => {
+      const newState = {
       ...prev,
       contactInfo: {
         ...prev.contactInfo,
         [currentField]: input
       }
-    }));
+      };
+      console.log('🔄 Estado actualizado:', JSON.stringify(newState.contactInfo, null, 2));
+      return newState;
+    });
 
     addMessage(input, 'user');
 
@@ -68,9 +77,10 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
       const nextField = contactFields[fieldIndex + 1];
       setState(prev => ({ ...prev, currentField: nextField.key }));
       
-      addMessage(`Gracias **${input}**. Ahora, ¿cuál es ${nextField.label.toLowerCase()}?`, 'bot');
+      addMessage(`Gracias. Ahora, ¿cuál es ${nextField.label.toLowerCase()}?`, 'bot');
     } else {
       // Contact collection complete
+      console.log('✅ Datos de contacto completados');
       setState(prev => ({ 
         ...prev, 
         currentStep: 'questionnaire', 
@@ -83,31 +93,55 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
       );
       
       setTimeout(() => {
-        const firstQuestion = questions[0];
+        const firstQuestion = questions[6]; // Empezar desde la pregunta 7 (tamaño de empresa)
         addMessage(
-          `**Pregunta ${firstQuestion.id}/5** - *${firstQuestion.category}*\n\n${firstQuestion.text}`,
+          `**Pregunta 1/17** - *${firstQuestion.category}*\n\n${firstQuestion.pregunta}`,
           'bot',
-          firstQuestion.options
+          firstQuestion.opcion_si && firstQuestion.opcion_no 
+            ? ['Micro empresa (1-10 empleados)', 'Pequeña empresa (11-50 empleados)', 'Mediana empresa (51-200 empleados)', 'Gran empresa (más de 200 empleados)'] 
+            : firstQuestion.opcion_si 
+              ? [firstQuestion.opcion_si]
+              : ['Continuar']
         );
       }, 1000);
     }
   }, [state.currentField, addMessage]);
 
   const handleQuestionAnswer = useCallback((answer: string) => {
-    const currentQuestion = questions[state.currentQuestionIndex];
+    const currentQuestionIndex = state.currentQuestionIndex;
+    const currentQuestion = questions[6 + currentQuestionIndex]; // Empezar desde índice 6
+    
+    console.log('❓ Procesando respuesta:', { currentQuestionIndex, questionId: currentQuestion.id, pregunta: currentQuestion.pregunta, answer });
     
     // Save answer
-    setState(prev => ({
+    setState(prev => {
+      const newState = {
       ...prev,
       answers: {
         ...prev.answers,
         [currentQuestion.id]: answer
       }
-    }));
+      };
+      console.log('💾 Respuesta guardada:', { questionId: currentQuestion.id, answer, totalAnswers: Object.keys(newState.answers).length, newAnswers: JSON.stringify(newState.answers, null, 2) });
+      return newState;
+    });
 
     addMessage(answer, 'user');
 
-    if (state.currentQuestionIndex < questions.length - 1) {
+    // Show explanation if available and if it's a Sí/No question
+    if (currentQuestion.opcion_si && currentQuestion.opcion_no && 
+        (currentQuestion.opcion_si === 'Micro empresa (1-10 empleados)' || 
+         currentQuestion.opcion_si.includes('La empresa') || 
+         currentQuestion.opcion_si.includes('Contar'))) {
+      // This is a Sí/No question
+      const explanation = answer === 'Sí' ? currentQuestion.opcion_si : currentQuestion.opcion_no;
+      addMessage(`💡 **Explicación:** ${explanation}`, 'bot');
+    } else if (currentQuestion.opcion_si && currentQuestion.opcion_no) {
+      // This is a multiple choice question (like size of company)
+      addMessage(`✅ **Respuesta registrada:** ${answer}`, 'bot');
+    }
+
+    if (currentQuestionIndex < 16) { // Solo 17 preguntas del cuestionario (excluyendo datos de contacto)
       // Next question
       setState(prev => ({ 
         ...prev, 
@@ -115,15 +149,22 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
       }));
       
       setTimeout(() => {
-        const nextQuestion = questions[state.currentQuestionIndex + 1];
+        const nextQuestion = questions[6 + currentQuestionIndex + 1];
         addMessage(
-          `**Pregunta ${nextQuestion.id}/5** - *${nextQuestion.category}*\n\n${nextQuestion.text}`,
+          `**Pregunta ${currentQuestionIndex + 2}/17** - *${nextQuestion.category}*\n\n${nextQuestion.pregunta}`,
           'bot',
-          nextQuestion.options
+          nextQuestion.opcion_si && nextQuestion.opcion_no 
+            ? (nextQuestion.opcion_si === 'Micro empresa (1-10 empleados)' 
+                ? ['Micro empresa (1-10 empleados)', 'Pequeña empresa (11-50 empleados)', 'Mediana empresa (51-200 empleados)', 'Gran empresa (más de 200 empleados)']
+                : ['Sí', 'No'])
+            : nextQuestion.opcion_si 
+              ? [nextQuestion.opcion_si]
+              : ['Continuar']
         );
       }, 1000);
     } else {
       // Generate diagnosis
+      console.log('🎯 Generando diagnóstico...');
       setState(prev => ({ ...prev, currentStep: 'diagnosis' }));
       generateDiagnosis();
     }
@@ -136,95 +177,189 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
     );
 
     setTimeout(() => {
-      const diagnosis = `# 📊 DIAGNÓSTICO DE CAPACIDAD EXPORTADORA
-
-## 👤 **Datos de la Evaluación**
-- **Empresa:** ${state.contactInfo.company}
-- **Responsable:** ${state.contactInfo.name}  
-- **Ciudad:** ${state.contactInfo.city}
-- **Fecha:** ${new Date().toLocaleDateString('es-CO')}
-
----
-
-## ✅ **FORTALEZAS IDENTIFICADAS**
-
-### 🏢 Preparación Institucional
-Tu empresa muestra **interés genuino** en la internacionalización, lo cual es el primer paso fundamental para el éxito exportador.
-
-### 📋 Compromiso con la Evaluación  
-Has completado exitosamente el proceso de evaluación, demostrando **seriedad** en el proceso de diagnóstico.
-
----
-
-## ⚠️ **ÁREAS DE MEJORA IDENTIFICADAS**
-
-### 🏆 Certificaciones de Calidad
-Es **altamente recomendable** implementar sistemas de gestión de calidad reconocidos internacionalmente como:
-- ISO 9001 (Gestión de Calidad)
-- Certificaciones específicas del sector
-- Buenas Prácticas de Manufactura (BPM)
-
-### 🏭 Capacidad Productiva
-Evalúa la posibilidad de **aumentar tu capacidad de producción** para atender demanda internacional que suele requerir volúmenes superiores.
-
-### 🌍 Conocimiento de Mercados
-Desarrollar **inteligencia de mercados** para identificar oportunidades específicas por país y sector.
-
----
-
-## 🎯 **RECOMENDACIONES ESTRATÉGICAS**
-
-### 1. 📜 **Certificaciones y Calidad**
-- Implementar ISO 9001 como base
-- Considerar certificaciones específicas de tu sector  
-- Establecer procesos de mejora continua
-
-### 2. 🔍 **Investigación de Mercados**
-- Realizar estudios de mercado por país objetivo
-- Identificar canales de distribución apropiados
-- Analizar competencia internacional
-
-### 3. 👥 **Capacitación del Equipo**  
-- Formación en comercio internacional
-- Desarrollo de competencias en idiomas
-- Conocimiento de logística internacional
-
-### 4. 🤝 **Alianzas Estratégicas**
-- Partnerships con empresas exportadoras experimentadas
-- Asociaciones gremiales de exportadores
-- Participación en misiones comerciales
-
-### 5. 📈 **Planificación Financiera**
-- Evaluación de costos de internacionalización
-- Acceso a instrumentos financieros para exportación
-- Gestión de riesgos cambiarios
-
----
-
-## 📞 **PRÓXIMOS PASOS**
-
-El **Laboratorio de Comercio Internacional de la Universidad de La Sabana** ofrece:
-
-- 🎓 **Programas especializados** en comercio internacional
-- 🔬 **Servicios de consultoría** para exportadores  
-- 📚 **Capacitaciones** en preparación exportadora
-- 🌐 **Inteligencia de mercados** y oportunidades comerciales
-
-> **Contacto:** Laboratorio de Comercio Internacional  
-> Universidad de La Sabana  
-> 📧 Email: [comercio.internacional@unisabana.edu.co](mailto:comercio.internacional@unisabana.edu.co)
-
----
-
-## 🙏 **AGRADECIMIENTOS**
-
-¡**Gracias** por participar en esta evaluación! Este diagnóstico puede servir como base para tomar decisiones estratégicas sobre la **internacionalización de tu empresa**.
-
-*Desarrollado por el Laboratorio de Comercio Internacional - Universidad de La Sabana © 2024*`;
-
-      addMessage(diagnosis, 'bot');
+      // Usar setState para acceder al estado más reciente
+      setState(currentState => {
+        const diagnosisResult = calculateDiagnosisWithState(currentState);
+        setDiagnosis(diagnosisResult);
+        
+        addMessage(
+          '✅ **¡Diagnóstico Completado!**\n\nTu evaluación ha sido procesada exitosamente. Ahora puedes revisar los resultados detallados, descargar el informe en PDF o CSV, y continuar chateando con nuestro asistente especializado.',
+          'bot'
+        );
+        
+        return currentState; // No cambiar el estado, solo acceder a él
+      });
     }, 2000);
-  }, [state.contactInfo, addMessage]);
+  }, [addMessage]);
+
+  const calculateDiagnosisWithState = (currentState: QuestionnaireState): DiagnosisResult => {
+    const answers = currentState.answers;
+    const contactInfo = currentState.contactInfo;
+    
+    console.log('🔍 Calculando diagnóstico con:', { 
+      totalAnswers: Object.keys(answers).length,
+      answers: JSON.stringify(answers, null, 2), 
+      contactInfo: JSON.stringify(contactInfo, null, 2) 
+    });
+    
+    let score = 0;
+    const strengths: string[] = [];
+    const weaknesses: string[] = [];
+    const recommendations: string[] = [];
+
+    // Calcular puntuación basada en respuestas
+    Object.entries(answers).forEach(([questionId, answer]) => {
+      const question = questions.find(q => q.id === parseInt(questionId));
+      console.log(`📝 Procesando pregunta ${questionId}:`, { 
+        questionId, 
+        answer, 
+        pregunta: question?.pregunta,
+        opcion_si: question?.opcion_si,
+        opcion_no: question?.opcion_no
+      });
+      
+      if (question && question.opcion_si && question.opcion_no) {
+        if (question.opcion_si === 'Micro empresa (1-10 empleados)') {
+          // Pregunta del tamaño de empresa - puntuación basada en el tamaño
+          console.log('🏢 Procesando pregunta de tamaño de empresa:', answer);
+          if (answer.includes('Micro')) {
+            score += 2; // Micro empresa - menor puntuación
+            weaknesses.push('Empresa de tamaño micro - puede requerir más recursos para exportar');
+            console.log('➕ Micro empresa: +2 puntos');
+          } else if (answer.includes('Pequeña')) {
+            score += 3; // Pequeña empresa
+            strengths.push('Empresa de tamaño pequeño - buen balance entre agilidad y recursos');
+            console.log('➕ Pequeña empresa: +3 puntos');
+          } else if (answer.includes('Mediana')) {
+            score += 4; // Mediana empresa
+            strengths.push('Empresa de tamaño mediano - recursos adecuados para exportación');
+            console.log('➕ Mediana empresa: +4 puntos');
+          } else if (answer.includes('Gran')) {
+            score += 5; // Gran empresa
+            strengths.push('Empresa de gran tamaño - recursos significativos para exportación');
+            console.log('➕ Gran empresa: +5 puntos');
+          }
+        }
+        // Preguntas Sí/No normales
+        else if (answer === 'Sí' || answer === 'No') {
+          console.log('✅ Procesando pregunta Sí/No:', answer);
+          if (answer === 'Sí') {
+            score += 4; // 4 puntos por respuesta positiva
+            if (question.opcion_si) {
+              strengths.push(question.opcion_si);
+            }
+            console.log('➕ Respuesta Sí: +4 puntos');
+          } else {
+            score += 1; // 1 punto por respuesta negativa
+            if (question.opcion_no) {
+              weaknesses.push(question.opcion_no);
+            }
+            console.log('➕ Respuesta No: +1 punto');
+          }
+        }
+        // Cualquier otra respuesta que no sea Sí/No
+        else {
+          // Dar puntos neutros para respuestas no categorizadas
+          score += 2;
+          console.log('➕ Respuesta neutral: +2 puntos');
+        }
+      }
+    });
+
+    console.log(`📊 Puntuación calculada: ${score}`);
+
+    // Normalizar puntuación a 100
+    const maxPossibleScore = 17 * 4; // 17 preguntas * 4 puntos máximos
+    score = Math.round((score / maxPossibleScore) * 100);
+
+    console.log(`📈 Puntuación normalizada: ${score}/100`);
+
+    // Determinar categoría
+    let category: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Experto';
+    if (score < 25) {
+      category = 'Principiante';
+    } else if (score < 50) {
+      category = 'Intermedio';
+    } else if (score < 75) {
+      category = 'Avanzado';
+    } else {
+      category = 'Experto';
+    }
+
+    console.log(`🏷️ Categoría asignada: ${category}`);
+
+    // Generar recomendaciones basadas en categoría y respuestas
+    if (category === 'Principiante') {
+      recommendations.push(
+        'Implementar un sistema de gestión de calidad básico (ISO 9001)',
+        'Desarrollar un plan de capacitación en comercio internacional',
+        'Realizar investigación básica de mercados objetivo',
+        'Establecer alianzas con empresas exportadoras experimentadas',
+        'Crear un plan de acción para la internacionalización'
+      );
+    } else if (category === 'Intermedio') {
+      recommendations.push(
+        'Obtener certificaciones específicas del sector',
+        'Optimizar la cadena logística para exportación',
+        'Desarrollar material promocional multilingüe',
+        'Participar en ferias y misiones comerciales',
+        'Implementar estrategias de precios internacionales'
+      );
+    } else if (category === 'Avanzado') {
+      recommendations.push(
+        'Expandir a mercados más exigentes',
+        'Desarrollar productos específicos para mercados internacionales',
+        'Implementar sistemas de gestión avanzados',
+        'Crear alianzas estratégicas con distribuidores internacionales',
+        'Desarrollar estrategias de innovación continua'
+      );
+    } else {
+      recommendations.push(
+        'Mantener liderazgo en estándares de calidad',
+        'Explorar nuevos mercados emergentes',
+        'Desarrollar capacidades de consultoría para otras empresas',
+        'Participar en la definición de estándares internacionales',
+        'Crear programas de transferencia de conocimiento'
+      );
+    }
+
+    // Agregar recomendaciones específicas basadas en debilidades
+    if (weaknesses.some(w => w.includes('certificaciones'))) {
+      recommendations.push('Priorizar la obtención de certificaciones internacionales reconocidas');
+    }
+    if (weaknesses.some(w => w.includes('logística'))) {
+      recommendations.push('Optimizar la cadena logística y establecer alianzas con operadores logísticos');
+    }
+    if (weaknesses.some(w => w.includes('personal'))) {
+      recommendations.push('Invertir en capacitación del personal en comercio internacional');
+    }
+    if (weaknesses.some(w => w.includes('Micro empresa'))) {
+      recommendations.push('Considerar alianzas estratégicas para compartir costos de exportación');
+    }
+
+    // Asegurar que siempre hay al menos algunos elementos
+    if (strengths.length === 0) {
+      strengths.push('La empresa muestra interés en internacionalización');
+    }
+    if (weaknesses.length === 0) {
+      weaknesses.push('Se requiere mayor preparación para exportar');
+    }
+
+    const result = {
+      company: contactInfo.company || 'Empresa',
+      name: contactInfo.name || 'Usuario',
+      city: contactInfo.city || 'Ciudad',
+      date: new Date().toLocaleDateString('es-CO'),
+      strengths: strengths.slice(0, 5), // Máximo 5 fortalezas
+      weaknesses: weaknesses.slice(0, 5), // Máximo 5 debilidades
+      recommendations: recommendations.slice(0, 8), // Máximo 8 recomendaciones
+      score,
+      category
+    };
+
+    console.log('🎯 Resultado del diagnóstico:', result);
+    return result;
+  };
 
   const handleUserMessage = useCallback((message: string) => {
     switch (state.currentStep) {
@@ -234,7 +369,7 @@ El **Laboratorio de Comercio Internacional de la Universidad de La Sabana** ofre
           startContactCollection();
         } else {
           addMessage(
-            '📖 **Más Información sobre el Termómetro Exportador**\n\nEl Termómetro Exportador es una **herramienta de diagnóstico especializada** que evalúa diferentes aspectos críticos de tu empresa:\n\n### 🔍 **Aspectos Evaluados:**\n- 🏆 **Certificaciones de calidad** (ISO, BPM, BPA)\n- 🌍 **Experiencia internacional** \n- 🏭 **Capacidad productiva**\n- 👥 **Recursos humanos especializados**\n- 📦 **Adaptación de productos**\n\n### 📊 **Beneficios del Diagnóstico:**\n- Identificación de **fortalezas** y **oportunidades de mejora**\n- **Recomendaciones estratégicas** personalizadas\n- **Hoja de ruta** para la internacionalización\n\nCuando estés listo, selecciona "Sí, comenzar cuestionario".',
+            '📖 **Más Información sobre el Termómetro Exportador**\n\nEl Termómetro Exportador es una **herramienta de diagnóstico especializada** que evalúa diferentes aspectos críticos de tu empresa:\n\n### 🔍 **Aspectos Evaluados:**\n- 🏆 **Certificaciones de calidad** (ISO, BPM, BPA)\n- 🌍 **Experiencia internacional** \n- 🏭 **Capacidad productiva**\n- 👥 **Recursos humanos especializados**\n- 📦 **Adaptación de productos**\n- 🚚 **Logística y operaciones**\n- 🤝 **Alianzas y redes**\n- 💰 **Financiamiento y estrategias**\n\n### 📊 **Beneficios del Diagnóstico:**\n- Identificación de **fortalezas** y **oportunidades de mejora**\n- **Recomendaciones estratégicas** personalizadas\n- **Hoja de ruta** para la internacionalización\n- **Chat especializado** para resolver dudas\n\nCuando estés listo, selecciona "Sí, comenzar cuestionario".',
             'bot',
             ['Sí, comenzar cuestionario']
           );
@@ -253,22 +388,47 @@ El **Laboratorio de Comercio Internacional de la Universidad de La Sabana** ofre
 
   const requestExplanation = useCallback(() => {
     if (state.currentStep === 'questionnaire') {
-      const currentQuestion = questions[state.currentQuestionIndex];
-      if (currentQuestion.explanation) {
+      const currentQuestion = questions[6 + state.currentQuestionIndex];
+      if (currentQuestion.opcion_si && currentQuestion.opcion_no) {
         addMessage(
-          `💡 **Explicación**\n\n${currentQuestion.explanation}\n\n---\n\n**Pregunta ${currentQuestion.id}/5** - *${currentQuestion.category}*\n\n${currentQuestion.text}`,
+          `💡 **Explicación de la Pregunta**\n\n**Pregunta:** ${currentQuestion.pregunta}\n\n**Opción Sí:** ${currentQuestion.opcion_si}\n\n**Opción No:** ${currentQuestion.opcion_no}`,
           'bot',
-          currentQuestion.options
+          ['Sí', 'No']
         );
       }
     }
   }, [state, addMessage]);
 
+  const continueToChat = useCallback(() => {
+    setState(prev => ({ ...prev, currentStep: 'chat' }));
+  }, []);
+
+  const restartEvaluation = useCallback(() => {
+    setState({
+      currentStep: 'welcome',
+      currentQuestionIndex: 0,
+      contactInfo: {},
+      answers: {},
+      diagnosisGenerated: false
+    });
+    setMessages([]);
+    setDiagnosis(null);
+    initializeBot();
+  }, [initializeBot]);
+
+  const backToDiagnosis = useCallback(() => {
+    setState(prev => ({ ...prev, currentStep: 'diagnosis' }));
+  }, []);
+
   return {
     messages,
     state,
+    diagnosis,
     handleUserMessage,
     initializeBot,
-    requestExplanation
+    requestExplanation,
+    continueToChat,
+    restartEvaluation,
+    backToDiagnosis
   };
 };

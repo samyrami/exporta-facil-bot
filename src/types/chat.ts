@@ -16,17 +16,31 @@ export interface ContactInfo {
 }
 
 export interface QuestionnaireState {
-  currentStep: 'welcome' | 'contact' | 'questionnaire' | 'diagnosis';
+  currentStep: 'welcome' | 'contact' | 'questionnaire' | 'diagnosis' | 'chat';
   currentField?: keyof ContactInfo;
   currentQuestionIndex: number;
   contactInfo: Partial<ContactInfo>;
   answers: Record<number, string>;
+  diagnosisGenerated: boolean;
 }
 
 export interface Question {
   id: number;
-  text: string;
-  options: string[];
-  explanation?: string;
+  pregunta: string;
+  opcion_si: string | null;
+  opcion_no: string | null;
+  diagnostico: string | null;
   category: string;
+}
+
+export interface DiagnosisResult {
+  company: string;
+  name: string;
+  city: string;
+  date: string;
+  strengths: string[];
+  weaknesses: string[];
+  recommendations: string[];
+  score: number;
+  category: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Experto';
 }
