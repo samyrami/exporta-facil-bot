@@ -1,13 +1,10 @@
-# Nixpacks configuration for Railway deployment
+# Force Nixpacks usage for Railway deployment
 
 [variables]
 NODE_ENV = "production"
 
-[phases.install]
-cmd = "npm ci"
-
 [phases.build]
-cmd = "npm run build"
+cmd = "npm ci --prefer-offline --no-audit && npm run build"
 
 [start]
 cmd = "npm start"
