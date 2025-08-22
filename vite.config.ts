@@ -12,6 +12,12 @@ export default defineConfig(({ mode }) => ({
   preview: {
     host: "0.0.0.0",
     port: parseInt(process.env.PORT || "3000"),
+    allowedHosts: [
+      "exporta-facil-bot-production.up.railway.app",
+      ".railway.app",
+      "localhost",
+      "127.0.0.1"
+    ],
   },
   plugins: [
     react(),
