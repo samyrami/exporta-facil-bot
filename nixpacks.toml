@@ -4,6 +4,11 @@ providers = ["node"]
 
 [variables]
 NODE_ENV = "production"
+NPM_CONFIG_PREFER_OFFLINE = "true"
+NPM_CONFIG_AUDIT = "false"
+
+[phases.setup]
+nixPkgs = ["nodejs_22"]
 
 [phases.install]
 cmd = "npm ci --prefer-offline --no-audit"
