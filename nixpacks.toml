@@ -3,8 +3,7 @@
 [variables]
 NODE_ENV = "production"
 
-[providers]
-node = "22"
+providers = ["node"]
 
 [phases.install]
 cmd = "npm ci --prefer-offline --no-audit"
