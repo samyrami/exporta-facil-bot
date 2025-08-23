@@ -102,7 +102,7 @@ public/
 - ✅ Diagnóstico final siempre disponible y exportable a PDF
 - ✅ Si OpenAI está habilitado, el texto mejora pero respeta el formato
 - ✅ Funciona completamente en frontend sin base de datos
-- ✅ Agradecimiento y mención del Laboratorio de Comercio Internacional
+- ✅ Agradecimiento y mención del Laboratorio de Gobierno y del Laboratorio de Comercio Internacional
 
 ## 🎯 Listo para Producción
 

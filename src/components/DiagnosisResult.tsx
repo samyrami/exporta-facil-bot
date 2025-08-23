@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Download, FileText, FileSpreadsheet, MessageCircle, RotateCcw } from 'lucide-react';
-import { DiagnosisResult } from '@/types/chat';
+import type { DiagnosisResult } from '@/types/chat';
 import { questions } from '@/data/questionnaire';
 
 interface DiagnosisResultProps {
@@ -11,7 +11,7 @@ interface DiagnosisResultProps {
   onRestart: () => void;
 }
 
-export const DiagnosisResult = ({ diagnosis, onContinueChat, onRestart }: DiagnosisResultProps) => {
+export const DiagnosisResultComponent = ({ diagnosis, onContinueChat, onRestart }: DiagnosisResultProps) => {
   const downloadPDF = () => {
     const content = generatePDFContent(diagnosis);
     const blob = new Blob([content], { type: 'text/plain' });
@@ -65,17 +65,17 @@ ${diagnosis.recommendations.map((r, i) => `${i + 1}. ${r}`).join('\n')}
 
 PRÓXIMOS PASOS
 ---------------
-El Laboratorio de Comercio Internacional de la Universidad de La Sabana ofrece:
+El Laboratorio de Gobierno y el Laboratorio de Comercio Internacional de la Universidad de La Sabana ofrecen:
 • Programas especializados en comercio internacional
 • Servicios de consultoría para exportadores
 • Capacitaciones en preparación exportadora
 • Inteligencia de mercados y oportunidades comerciales
 
-Contacto: Laboratorio de Comercio Internacional
+Contacto: Laboratorio de Gobierno y Laboratorio de Comercio Internacional
 Universidad de La Sabana
 Email: comercio.internacional@unisabana.edu.co
 
-Desarrollado por el Laboratorio de Comercio Internacional - Universidad de La Sabana © 2024`;
+Desarrollado por el Laboratorio de Gobierno con el apoyo del Laboratorio de Comercio Internacional - Universidad de La Sabana © 2024`;
   };
 
   const generateCSVContent = (diagnosis: DiagnosisResult) => {
@@ -264,7 +264,7 @@ Desarrollado por el Laboratorio de Comercio Internacional - Universidad de La Sa
         <CardContent className="pt-6">
           <h3 className="font-semibold text-blue-800 mb-2">📞 Próximos Pasos</h3>
           <p className="text-sm text-blue-700 mb-3">
-            El <strong>Laboratorio de Comercio Internacional de la Universidad de La Sabana</strong> ofrece:
+            El <strong>Laboratorio de Gobierno</strong> y el <strong>Laboratorio de Comercio Internacional de la Universidad de La Sabana</strong> ofrecen:
           </p>
           <ul className="text-sm text-blue-700 space-y-1">
             <li>• <strong>Programas especializados</strong> en comercio internacional</li>

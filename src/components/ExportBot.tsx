@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { UniversityBranding } from './UniversityBranding';
-import { DiagnosisResult } from './DiagnosisResult';
+import { DiagnosisResultComponent } from './DiagnosisResult';
 import { OpenAIChat } from './OpenAIChat';
 import { useChatBot } from '@/hooks/useChatBot';
 import { Button } from '@/components/ui/button';
@@ -50,7 +50,7 @@ export const ExportBot = () => {
     switch (state.currentStep) {
       case 'diagnosis':
         return diagnosis ? (
-          <DiagnosisResult
+                        <DiagnosisResultComponent
             diagnosis={diagnosis}
             onContinueChat={continueToChat}
             onRestart={restartEvaluation}
@@ -193,7 +193,7 @@ export const ExportBot = () => {
 
         <div className="mt-6 text-center text-xs text-muted-foreground">
           <p>
-            Desarrollado por el <strong>Laboratorio de Comercio Internacional</strong><br />
+            Desarrollado por el <strong>Laboratorio de Gobierno</strong> con el apoyo del <strong>Laboratorio de Comercio Internacional</strong><br />
             Universidad de La Sabana © 2024
           </p>
         </div>

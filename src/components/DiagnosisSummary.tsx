@@ -283,7 +283,7 @@ export const DiagnosisSummary = ({
             <CardContent>
               <div className="prose prose-sm max-w-none">
                 <p>
-                  El <strong>Laboratorio de Comercio Internacional de la Universidad de La Sabana</strong> ofrece:
+                  El <strong>Laboratorio de Gobierno</strong> y el <strong>Laboratorio de Comercio Internacional de la Universidad de La Sabana</strong> ofrecen:
                 </p>
                 <ul className="space-y-2 mt-4">
                   <li>🎓 <strong>Programas especializados</strong> en comercio internacional</li>
@@ -295,7 +295,7 @@ export const DiagnosisSummary = ({
                 <div className="mt-6 p-4 bg-primary/10 rounded-lg">
                   <p className="font-medium">📧 Contacto:</p>
                   <p className="text-sm">
-                    Laboratorio de Comercio Internacional<br />
+                    Laboratorio de Gobierno y Laboratorio de Comercio Internacional<br />
                     Universidad de La Sabana<br />
                     Email: comercio.internacional@unisabana.edu.co
                   </p>
@@ -313,7 +313,7 @@ export const DiagnosisSummary = ({
                   como base para tomar decisiones estratégicas sobre la <strong>internacionalización de su empresa</strong>.
                 </p>
                 <p className="text-xs">
-                  <em>Desarrollado por el Laboratorio de Comercio Internacional - Universidad de La Sabana © 2024</em>
+                  <em>Desarrollado por el Laboratorio de Gobierno con el apoyo del Laboratorio de Comercio Internacional - Universidad de La Sabana © 2024</em>
                 </p>
               </div>
             </CardContent>

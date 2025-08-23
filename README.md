@@ -1,6 +1,6 @@
 # Exporta Fácil Bot - Termómetro Exportador
 
-Herramienta de diagnóstico de capacidad exportadora desarrollada por el **Laboratorio de Comercio Internacional de la Universidad de La Sabana**.
+Herramienta de diagnóstico de capacidad exportadora desarrollada por el **Laboratorio de Gobierno** con el apoyo del **Laboratorio de Comercio Internacional de la Universidad de La Sabana**.
 
 ## 🎯 Descripción
 
@@ -80,7 +80,7 @@ VITE_OPENAI_API_KEY=tu-api-key-aqui
 
 ## 👥 Desarrollado por
 
-**Laboratorio de Comercio Internacional** - Universidad de La Sabana
+**Laboratorio de Gobierno** y **Laboratorio de Comercio Internacional** - Universidad de La Sabana
 
 📧 **Contacto**: comercio.internacional@unisabana.edu.co
 
