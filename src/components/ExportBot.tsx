@@ -16,7 +16,7 @@ export const ExportBot = () => {
     diagnosis,
     handleUserMessage, 
     initializeBot, 
-    requestExplanation,
+
     continueToChat,
     restartEvaluation,
     backToDiagnosis
@@ -41,7 +41,7 @@ export const ExportBot = () => {
     }
   }, [messages]);
 
-  const canRequestExplanation = state.currentStep === 'questionnaire' && messages.length > 0;
+
   const isWaitingForInput = state.currentStep === 'contact' || 
     (state.currentStep === 'questionnaire' && !messages[messages.length - 1]?.options);
 
@@ -161,17 +161,7 @@ export const ExportBot = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                {canRequestExplanation && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={requestExplanation}
-                    className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20"
-                  >
-                    <HelpCircle className="w-4 h-4 mr-2" />
-                    Explicación
-                  </Button>
-                )}
+
                 {state.currentStep !== 'diagnosis' && state.currentStep !== 'chat' && (
                   <Button
                     variant="outline"

@@ -76,7 +76,7 @@ export const ChatQuestionnaireWizard = ({
       const welcomeMessage: ChatMessage = {
         id: 'welcome',
         type: 'bot',
-        content: `¡Hola ${contactInfo.name}! 👋\n\nSoy el asistente del **Termómetro Exportador** de la Universidad de La Sabana. Voy a ayudarte a evaluar la capacidad exportadora de **${contactInfo.company}**.\n\nTe haré ${questions.length} preguntas sobre diferentes aspectos de tu empresa. Al final, recibirás un diagnóstico personalizado con recomendaciones específicas.\n\n¿Estás listo para comenzar? 🚀`,
+        content: `¡Hola ${contactInfo.name}! 👋\n\nSoy el asistente del **Exporta Check** de la Universidad de La Sabana. Voy a ayudarte a evaluar la capacidad exportadora de **${contactInfo.company}**.\n\nTe haré ${questions.length} preguntas sobre diferentes aspectos de tu empresa. Al final, recibirás un diagnóstico personalizado con recomendaciones específicas.\n\n¿Estás listo para comenzar? 🚀`,
         timestamp: new Date()
       };
       initialMessages.push(welcomeMessage);

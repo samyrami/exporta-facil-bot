@@ -1,4 +1,4 @@
-# Termómetro Exportador - Implementación Completada
+# Exporta Check - Implementación Completada
 
 ## ✅ Características Implementadas
 
@@ -11,7 +11,7 @@
 
 ### 2. **Cuestionario Paso a Paso**
 - ✅ Carga de preguntas desde `public/termometro_exportador_questions.json`
-- ✅ 16 preguntas específicas del termómetro exportador
+- ✅ 16 preguntas específicas de Exporta Check
 - ✅ Una pregunta a la vez con opciones como botones
 - ✅ Botón "¿Qué significa...?" para mostrar help cuando existe
 - ✅ Controles Anterior/Siguiente

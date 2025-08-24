@@ -1,23 +1,16 @@
 // Configuración de variables de entorno
-export const envConfig = {
-  // OpenAI
+export const env = {
+  // OpenAI Configuration
   OPENAI_API_KEY: import.meta.env.VITE_OPENAI_API_KEY || '',
+  OPENAI_MODEL: import.meta.env.VITE_OPENAI_MODEL || 'gpt-4o-mini',
   
-  // App
-  APP_NAME: import.meta.env.VITE_APP_NAME || 'Termómetro Exportador',
-  APP_VERSION: import.meta.env.VITE_APP_VERSION || '1.0.0',
+  // App Configuration
+  APP_NAME: import.meta.env.VITE_APP_NAME || 'Exporta Check',
   
-  // Verificar configuración
-  isOpenAIConfigured: () => !!import.meta.env.VITE_OPENAI_API_KEY,
+  // Feature Flags
+  ENABLE_CHAT: import.meta.env.VITE_ENABLE_CHAT === 'true' || false,
+  ENABLE_QUESTIONNAIRE: import.meta.env.VITE_ENABLE_QUESTIONNAIRE === 'true' || true,
   
-  // Obtener API key con fallback
-  getOpenAIKey: () => {
-    const envKey = import.meta.env.VITE_OPENAI_API_KEY;
-    if (envKey) return envKey;
-    
-    const storedKey = localStorage.getItem('openai_api_key');
-    if (storedKey) return storedKey;
-    
-    return null;
-  }
+  // Development
+  IS_DEV: import.meta.env.DEV || false,
 };

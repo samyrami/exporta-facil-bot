@@ -25,7 +25,7 @@ export const useChatBot = () => {
   }, []);
 
   const initializeBot = useCallback(() => {
-    const welcomeMessage = `¡Hola! Soy el asistente del **Termómetro Exportador**, desarrollado por el **Laboratorio de Gobierno** con el apoyo del **Laboratorio de Comercio Internacional de la Universidad de La Sabana**.
+    const welcomeMessage = `¡Hola! Soy el asistente del **Exporta Check**, desarrollado por el **Laboratorio de Gobierno** con el apoyo del **Laboratorio de Comercio Internacional de la Universidad de La Sabana**.
 
 Este cuestionario te ayudará a **evaluar la preparación y capacidad exportadora** de tu empresa. La información que proporciones será utilizada únicamente para diagnóstico y orientación general.
 
@@ -128,18 +128,8 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
 
     addMessage(answer, 'user');
 
-    // Show explanation if available and if it's a Sí/No question
-    if (currentQuestion.opcion_si && currentQuestion.opcion_no && 
-        (currentQuestion.opcion_si === 'Micro empresa (1-10 empleados)' || 
-         currentQuestion.opcion_si.includes('La empresa') || 
-         currentQuestion.opcion_si.includes('Contar'))) {
-      // This is a Sí/No question
-      const explanation = answer === 'Sí' ? currentQuestion.opcion_si : currentQuestion.opcion_no;
-      addMessage(`💡 **Explicación:** ${explanation}`, 'bot');
-    } else if (currentQuestion.opcion_si && currentQuestion.opcion_no) {
-      // This is a multiple choice question (like size of company)
-      addMessage(`✅ **Respuesta registrada:** ${answer}`, 'bot');
-    }
+    // Confirm answer received
+    addMessage(`✅ **Respuesta registrada:** ${answer}`, 'bot');
 
     if (currentQuestionIndex < 16) { // Solo 17 preguntas del cuestionario (excluyendo datos de contacto)
       // Next question
@@ -369,7 +359,7 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
           startContactCollection();
         } else {
           addMessage(
-            '📖 **Más Información sobre el Termómetro Exportador**\n\nEl Termómetro Exportador es una **herramienta de diagnóstico especializada** que evalúa diferentes aspectos críticos de tu empresa:\n\n### 🔍 **Aspectos Evaluados:**\n- 🏆 **Certificaciones de calidad** (ISO, BPM, BPA)\n- 🌍 **Experiencia internacional** \n- 🏭 **Capacidad productiva**\n- 👥 **Recursos humanos especializados**\n- 📦 **Adaptación de productos**\n- 🚚 **Logística y operaciones**\n- 🤝 **Alianzas y redes**\n- 💰 **Financiamiento y estrategias**\n\n### 📊 **Beneficios del Diagnóstico:**\n- Identificación de **fortalezas** y **oportunidades de mejora**\n- **Recomendaciones estratégicas** personalizadas\n- **Hoja de ruta** para la internacionalización\n- **Chat especializado** para resolver dudas\n\nCuando estés listo, selecciona "Sí, comenzar cuestionario".',
+            '📖 **Más Información sobre Exporta Check**\n\nExporta Check es una **herramienta de diagnóstico especializada** que evalúa diferentes aspectos críticos de tu empresa:\n\n### 🔍 **Aspectos Evaluados:**\n- 🏆 **Certificaciones de calidad** (ISO, BPM, BPA)\n- 🌍 **Experiencia internacional** \n- 🏭 **Capacidad productiva**\n- 👥 **Recursos humanos especializados**\n- 📦 **Adaptación de productos**\n- 🚚 **Logística y operaciones**\n- 🤝 **Alianzas y redes**\n- 💰 **Financiamiento y estrategias**\n\n### 📊 **Beneficios del Diagnóstico:**\n- Identificación de **fortalezas** y **oportunidades de mejora**\n- **Recomendaciones estratégicas** personalizadas\n- **Hoja de ruta** para la internacionalización\n- **Chat especializado** para resolver dudas\n\nCuando estés listo, selecciona "Sí, comenzar cuestionario".',
             'bot',
             ['Sí, comenzar cuestionario']
           );
@@ -386,18 +376,7 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
     }
   }, [state, addMessage, startContactCollection, handleContactInput, handleQuestionAnswer]);
 
-  const requestExplanation = useCallback(() => {
-    if (state.currentStep === 'questionnaire') {
-      const currentQuestion = questions[6 + state.currentQuestionIndex];
-      if (currentQuestion.opcion_si && currentQuestion.opcion_no) {
-        addMessage(
-          `💡 **Explicación de la Pregunta**\n\n**Pregunta:** ${currentQuestion.pregunta}\n\n**Opción Sí:** ${currentQuestion.opcion_si}\n\n**Opción No:** ${currentQuestion.opcion_no}`,
-          'bot',
-          ['Sí', 'No']
-        );
-      }
-    }
-  }, [state, addMessage]);
+
 
   const continueToChat = useCallback(() => {
     setState(prev => ({ ...prev, currentStep: 'chat' }));
@@ -426,7 +405,6 @@ Este cuestionario te ayudará a **evaluar la preparación y capacidad exportador
     diagnosis,
     handleUserMessage,
     initializeBot,
-    requestExplanation,
     continueToChat,
     restartEvaluation,
     backToDiagnosis

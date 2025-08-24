@@ -72,7 +72,7 @@ export const OnboardingForm = ({ onComplete, initialData = {} }: OnboardingFormP
         
         <Card className="shadow-strong border-card-border">
           <CardHeader className="bg-gradient-to-r from-primary to-primary-light text-primary-foreground">
-            <CardTitle className="text-2xl">Termómetro Exportador</CardTitle>
+            <CardTitle className="text-2xl">Exporta Check</CardTitle>
             <CardDescription className="text-primary-foreground/80">
               Cuestionario de Evaluación de Capacidad Exportadora
             </CardDescription>

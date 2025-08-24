@@ -1,4 +1,4 @@
-# Exporta Fácil Bot - Termómetro Exportador
+# Exporta Fácil Bot - Exporta Check
 
 Herramienta de diagnóstico de capacidad exportadora desarrollada por el **Laboratorio de Gobierno** con el apoyo del **Laboratorio de Comercio Internacional de la Universidad de La Sabana**.
 

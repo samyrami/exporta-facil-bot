@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Termómetro Exportador",
+    "title": "Exporta Check",
     "description": "Cuestionario de evaluación de capacidad exportadora",
     "version": "1.0",
     "created_by": "Laboratorio de Gobierno y Laboratorio de Comercio Internacional - Universidad de La Sabana",
@@ -59,35 +59,19 @@
       "options": [
         {
           "value": 1,
-          "label": "Micro empresa (hasta 10 empleados, ventas ≤ $2.070 millones)",
-          "diagnosis": {
-            "type": "opportunity",
-            "message": "Las micro empresas pueden acceder a programas especializados de apoyo a la exportación."
-          }
+          "label": "Micro empresa (hasta 10 empleados, ventas ≤ $2.070 millones)"
         },
         {
           "value": 2,
-          "label": "Pequeña empresa (11-50 empleados, ventas $2.070 - $17.240 millones)",
-          "diagnosis": {
-            "type": "opportunity",
-            "message": "Las pequeñas empresas tienen flexibilidad para adaptarse a mercados internacionales."
-          }
+          "label": "Pequeña empresa (11-50 empleados, ventas $2.070 - $17.240 millones)"
         },
         {
           "value": 3,
-          "label": "Mediana empresa (51-200 empleados, ventas $17.240 - $103.620 millones)",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Las medianas empresas tienen recursos y estructura para internacionalizarse exitosamente."
-          }
+          "label": "Mediana empresa (51-200 empleados, ventas $17.240 - $103.620 millones)"
         },
         {
           "value": 4,
-          "label": "Gran empresa (más de 200 empleados, ventas > $103.620 millones)",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Las grandes empresas cuentan con recursos significativos para expansión internacional."
-          }
+          "label": "Gran empresa (más de 200 empleados, ventas > $103.620 millones)"
         }
       ],
       "help": "Para más información sobre definición de tamaño empresarial, consulte: https://www.mipymes.gov.co/temas-de-interes/definicion-de-tamano-empresarial"
@@ -100,19 +84,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, contamos con BPA/BPM vigentes",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La empresa demuestra cumplimiento con estándares de calidad requeridos para exportación."
-          }
+          "label": "Sí, contamos con BPA/BPM vigentes"
         },
         {
           "value": 1,
-          "label": "No contamos con BPA/BPM",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de BPA puede limitar el acceso a mercados internacionales exigentes."
-          }
+          "label": "No contamos con BPA/BPM"
         }
       ]
     },
@@ -124,19 +100,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos certificaciones internacionales vigentes",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La empresa cuenta con certificaciones internacionales reconocidas."
-          }
+          "label": "Sí, tenemos certificaciones internacionales vigentes"
         },
         {
           "value": 1,
-          "label": "No tenemos certificaciones internacionales",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de certificaciones internacionales puede restringir oportunidades de negocio en el exterior."
-          }
+          "label": "No tenemos certificaciones internacionales"
         }
       ]
     },
@@ -148,27 +116,15 @@
       "options": [
         {
           "value": 4,
-          "label": "La empresa exporta directamente",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La experiencia en exportación directa es una ventaja competitiva importante."
-          }
+          "label": "La empresa exporta directamente"
         },
         {
           "value": 2,
-          "label": "La empresa exporta indirectamente",
-          "diagnosis": {
-            "type": "opportunity",
-            "message": "La exportación indirecta es una base sólida para desarrollar exportación directa."
-          }
+          "label": "La empresa exporta indirectamente"
         },
         {
           "value": 1,
-          "label": "No exportamos actualmente",
-          "diagnosis": {
-            "type": "improvement",
-            "message": "Es necesario desarrollar experiencia exportadora gradualmente."
-          }
+          "label": "No exportamos actualmente"
         }
       ]
     },
@@ -180,19 +136,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, contamos con personal especializado",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Contar con expertise comercial para la expansión internacional."
-          }
+          "label": "Sí, contamos con personal especializado"
         },
         {
           "value": 1,
-          "label": "No tenemos personal capacitado en comercio exterior",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de expertise comercial puede obstaculizar la internacionalización."
-          }
+          "label": "No tenemos personal capacitado en comercio exterior"
         }
       ]
     },
@@ -204,19 +152,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos un sistema de gestión de calidad",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Tener un sistema de gestión de calidad es una fortaleza para competir internacionalmente."
-          }
+          "label": "Sí, tenemos un sistema de gestión de calidad"
         },
         {
           "value": 1,
-          "label": "No tenemos sistema de gestión de calidad",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de un sistema de calidad puede afectar la confianza de clientes internacionales."
-          }
+          "label": "No tenemos sistema de gestión de calidad"
         }
       ]
     },
@@ -228,19 +168,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos cadena logística optimizada",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Contar con una cadena logística optimizada es clave para competitividad global."
-          }
+          "label": "Sí, tenemos cadena logística optimizada"
         },
         {
           "value": 1,
-          "label": "No tenemos cadena logística optimizada",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de una cadena logística optimizada puede aumentar costos y riesgos en exportación."
-          }
+          "label": "No tenemos cadena logística optimizada"
         }
       ]
     },
@@ -252,19 +184,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos alianzas con distribuidores/agentes",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Tener alianzas con distribuidores es una ventaja competitiva en mercados internacionales."
-          }
+          "label": "Sí, tenemos alianzas con distribuidores/agentes"
         },
         {
           "value": 1,
-          "label": "No tenemos alianzas con distribuidores",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de alianzas con distribuidores puede dificultar la entrada a mercados extranjeros."
-          }
+          "label": "No tenemos alianzas con distribuidores"
         }
       ]
     },
@@ -276,19 +200,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos estrategia de precios internacional",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La empresa ha formulado una estrategia de costos internacional."
-          }
+          "label": "Sí, tenemos estrategia de precios internacional"
         },
         {
           "value": 1,
-          "label": "No tenemos estrategia de precios internacional",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La empresa no cuenta con una estrategia de precios adaptada a los mercados internacionales."
-          }
+          "label": "No tenemos estrategia de precios internacional"
         }
       ]
     },
@@ -300,19 +216,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos plan de distribución internacional",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Tener un plan de distribución internacional es una fortaleza."
-          }
+          "label": "Sí, tenemos plan de distribución internacional"
         },
         {
           "value": 1,
-          "label": "No tenemos plan de distribución internacional",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de un plan de distribución puede retrasar la expansión internacional."
-          }
+          "label": "No tenemos plan de distribución internacional"
         }
       ]
     },
@@ -324,19 +232,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, participamos en ferias/misiones internacionales",
-          "diagnosis": {
-            "type": "strength",
-            "message": "Participación en ferias internacionales mejora visibilidad y contactos."
-          }
+          "label": "Sí, participamos en ferias/misiones internacionales"
         },
         {
           "value": 1,
-          "label": "No hemos participado en ferias internacionales",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La ausencia en ferias limita las oportunidades de networking y clientes."
-          }
+          "label": "No hemos participado en ferias internacionales"
         }
       ]
     },
@@ -348,19 +248,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos material promocional multilingüe",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La empresa dispone de material multilingüe para promoción."
-          }
+          "label": "Sí, tenemos material promocional multilingüe"
         },
         {
           "value": 1,
-          "label": "No tenemos material en otros idiomas",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de material en otros idiomas limita la comunicación internacional."
-          }
+          "label": "No tenemos material en otros idiomas"
         }
       ]
     },
@@ -372,19 +264,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, utilizamos mecanismos de financiación para exportación",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La empresa ha accedido a mecanismos financieros de apoyo a exportación."
-          }
+          "label": "Sí, utilizamos mecanismos de financiación para exportación"
         },
         {
           "value": 1,
-          "label": "No hemos utilizado financiación para exportación",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de financiamiento puede restringir operaciones internacionales."
-          }
+          "label": "No hemos utilizado financiación para exportación"
         }
       ]
     },
@@ -396,19 +280,11 @@
       "options": [
         {
           "value": 3,
-          "label": "Sí, tenemos experiencia en exportación indirecta",
-          "diagnosis": {
-            "type": "opportunity",
-            "message": "La empresa cuenta con experiencia en exportación indirecta."
-          }
+          "label": "Sí, tenemos experiencia en exportación indirecta"
         },
         {
           "value": 1,
-          "label": "No tenemos experiencia en exportación indirecta",
-          "diagnosis": {
-            "type": "improvement",
-            "message": "La ausencia de experiencia indirecta limita el aprendizaje en exportación."
-          }
+          "label": "No tenemos experiencia en exportación indirecta"
         }
       ]
     },
@@ -420,19 +296,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, realizamos investigación sistemática de mercados",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La empresa investiga mercados internacionales regularmente."
-          }
+          "label": "Sí, realizamos investigación sistemática de mercados"
         },
         {
           "value": 1,
-          "label": "No realizamos investigación sistemática",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "No realizar investigación sistemática puede aumentar riesgos de fracaso."
-          }
+          "label": "No realizamos investigación sistemática"
         }
       ]
     },
@@ -444,19 +312,11 @@
       "options": [
         {
           "value": 4,
-          "label": "Sí, tenemos personal dedicado a exportaciones",
-          "diagnosis": {
-            "type": "strength",
-            "message": "La empresa dispone de personal dedicado a exportaciones."
-          }
+          "label": "Sí, tenemos personal dedicado a exportaciones"
         },
         {
           "value": 1,
-          "label": "No tenemos personal exclusivo para exportaciones",
-          "diagnosis": {
-            "type": "weakness",
-            "message": "La falta de personal exclusivo puede dificultar la gestión internacional."
-          }
+          "label": "No tenemos personal exclusivo para exportaciones"
         }
       ]
     }

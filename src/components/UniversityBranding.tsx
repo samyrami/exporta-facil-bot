@@ -1,7 +1,6 @@
 import unisabanaLogoOficial from '@/assets/unisabana-logo-oficial.png';
-import inaldeLogo from '@/assets/inalde-logo.jpg';
 import govlabLogo from '@/assets/govlab-logo.jpeg';
-import lciLogo from '@/assets/lci-logo.jpeg';
+import exportaCheckLogo from '@/assets/exporta-check-logo.svg';
 
 export const UniversityBranding = () => {
   return (
@@ -14,27 +13,22 @@ export const UniversityBranding = () => {
         />
         <div className="w-px h-12 bg-gray-300"></div>
         <img 
-          src={inaldeLogo} 
-          alt="INALDE Business School" 
-          className="h-14 w-auto object-contain"
+          src={exportaCheckLogo} 
+          alt="Exporta Check Aguacate" 
+          className="h-16 w-auto object-contain"
         />
       </div>
       <h1 className="text-2xl font-bold text-primary mb-2">
-        Termómetro Exportador
+        Exporta Check
       </h1>
       <p className="text-sm text-muted-foreground">
         <strong>Laboratorio de Gobierno</strong> • <strong>Laboratorio de Comercio Internacional</strong><br />
-        Universidad de La Sabana • INALDE Business School
+        Universidad de La Sabana
       </p>
       <div className="flex items-center justify-center gap-4 mt-4">
         <img 
           src={govlabLogo} 
           alt="Laboratorio de Gobierno" 
-          className="h-12 w-auto object-contain"
-        />
-        <img 
-          src={lciLogo} 
-          alt="Laboratorio de Comercio Internacional" 
           className="h-12 w-auto object-contain"
         />
       </div>

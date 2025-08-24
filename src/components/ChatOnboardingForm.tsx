@@ -48,7 +48,7 @@ export const ChatOnboardingForm = ({ onComplete, initialData = {} }: ChatOnboard
       const welcomeMessage: ChatMessage = {
         id: 'welcome',
         type: 'bot',
-        content: `¡Hola! 👋 Soy el asistente del **Termómetro Exportador** de la Universidad de La Sabana.\n\nAntes de comenzar con la evaluación, necesito conocer algunos datos básicos de su empresa. Esta información será utilizada únicamente para personalizar su diagnóstico.\n\n¿Empezamos? 🚀`,
+        content: `¡Hola! 👋 Soy el asistente del **Exporta Check** de la Universidad de La Sabana.\n\nAntes de comenzar con la evaluación, necesito conocer algunos datos básicos de su empresa. Esta información será utilizada únicamente para personalizar su diagnóstico.\n\n¿Empezamos? 🚀`,
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
