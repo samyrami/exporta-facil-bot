@@ -1,6 +1,6 @@
 import unisabanaLogoOficial from '@/assets/unisabana-logo-oficial.png';
 import govlabLogo from '@/assets/govlab-logo.jpeg';
-import exportaCheckLogo from '@/assets/exporta-check-logo.svg';
+import exportaCheckLogo from '@/assets/exporta-check-logo.jpg';
 
 export const UniversityBranding = () => {
   return (
